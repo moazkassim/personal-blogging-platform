@@ -61,10 +61,12 @@ const deletePost = async (req, res) => {
       return res.status(403).json({ message: "Unauthorized" });
     }
     await postModel.findByIdAndDelete(req.params.id);
-    res.json({ success: true, message: "post deleted" });
+    return res.status(200).json({ success: true, message: "post deleted" });
   } catch (error) {
-    console.log(error);
-    res.json({ success: false, message: error.message });
+    return res.status(500).json({
+      success: false,
+      message: "An internal server error occurred",
+    });
   }
 };
 

@@ -20,15 +20,15 @@ const registerUser = async (req, res) => {
     }
     // validating email format &  strong password
     if (!validator.isEmail(email)) {
-      return res.json({
+      return res.status(409).json({
         success: false,
-        message: "Please enter a valid email",
+        message: "User already exists",
       });
     }
     if (password.length < 8) {
-      return res.json({
+      return res.status(400).json({
         success: false,
-        message: "please enter a strong password",
+        message: "Password must be at least 8 characters long",
       });
     }
     // hashing user password
@@ -39,10 +39,15 @@ const registerUser = async (req, res) => {
     const user = await newUser.save();
 
     const token = createToken(user._id);
-    res.json({ success: true, token });
+    return res.status(201).json({
+      success: true,
+      token,
+    });
   } catch (error) {
-    console.log(error);
-    res.json({ success: false, message: error.message });
+    return res.status(500).json({
+      success: false,
+      message: "Authentication failed. Please try again later.",
+    });
   }
 };
 //controller function for user login
@@ -54,19 +59,28 @@ const loginUser = async (req, res) => {
     const user = await userModel.findOne({ email });
 
     if (!user) {
-      return res.json({ success: false, message: "User is not exists" });
+      return res.status(404).json({
+        success: false,
+        message: "User does not exist",
+      });
     }
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (isMatch) {
       const token = createToken(user._id);
-      res.json({ success: true, token });
+      return res.status(200).json({
+        success: true,
+        token,
+      });
     } else {
       res.json({ success: false, message: "Invalid credentials" });
     }
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: error.message });
+    return res.status(401).json({
+      success: false,
+      message: "Invalid credentials",
+    });
   }
 };
 
