@@ -1,7 +1,6 @@
 import userModel from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import validator from "validator";
 import postModel from "../models/postModel.js";
 
 const getAllPosts = async (req, res) => {
@@ -18,11 +17,7 @@ const createPost = async (req, res) => {
   console.log("Controller: Request User Object:", req.user);
   try {
     const { title, content } = req.body;
-    if (!title || !content) {
-      return res
-        .status(400)
-        .json({ message: "Title and content are required" });
-    }
+
     const newPost = new postModel({
       title,
       content,
@@ -41,9 +36,6 @@ const updatePost = async (req, res) => {
     const { id } = req.params;
     const { title, content } = req.body;
     const post = await postModel.findById(id);
-    if (!post) {
-      return res.status(404).json({ message: "Post not found" });
-    }
     if (post.author.toString() !== req.user.id) {
       return res.status(403).json({ message: "Unauthorized" });
     }
