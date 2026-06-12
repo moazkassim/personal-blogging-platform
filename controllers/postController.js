@@ -6,7 +6,7 @@ import postModel from "../models/postModel.js";
 
 const getAllPosts = async (req, res) => {
   try {
-    const posts = await postModel.find({});
+    const posts = await postModel.find({}); ////////////////////
     res.status(200).json(posts);
   } catch (error) {
     res
@@ -26,6 +26,7 @@ const createPost = async (req, res) => {
     const newPost = new postModel({
       title,
       content,
+      author: req.user.id,
     });
     const savedPost = await newPost.save();
     res.status(201).json(savedPost);
@@ -43,6 +44,9 @@ const updatePost = async (req, res) => {
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
+    if (post.author.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
     const updatedPost = await postModel.findByIdAndUpdate(
       id,
       { title, content },
@@ -59,7 +63,12 @@ const updatePost = async (req, res) => {
 const deletePost = async (req, res) => {
   try {
     const { id } = req.params;
-    await postModel.findByIdAndDelete(id);
+    const post = await postModel.findById(id);
+    if (!post) return res.status(404).json({ message: "Post not found" });
+    if (post.author.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+    await postModel.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: "post deleted" });
   } catch (error) {
     console.log(error);
