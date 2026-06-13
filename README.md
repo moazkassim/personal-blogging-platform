@@ -2,7 +2,7 @@
 
 A secure, RESTful API for a blogging platform built with Node.js, Express, and MongoDB. This project implements user authentication, CRUD operations for posts, and one-to-many relationships between authors and their content.
 
-## 1. Setup and Run Locally
+## 1. Set up and Run Locally
 
 ### Prerequisites
 * [Node.js](https://nodejs.org/) (v18+ recommended)
@@ -34,8 +34,12 @@ A secure, RESTful API for a blogging platform built with Node.js, Express, and M
     GET      /api/post/posts               Fetch all blog posts             No
     PUT      /api/post/posts/:id           Update a post (owner only)       Yes
     DELETE   /api/post/posts/:id           Delete a post (owner only)       Yes
+
+## 3. API Documentation 
+    Postman Collection link: https://technical-candidate-11284203-s-team.postman.co/workspace/technical-candidate-11284203's-~edc568a5-8b97-452c-8b38-6aef3b28ce57/collection/26559611-4639ce8f-2286-4325-a37f-0c37b3cf0eaf?action=share&creator=26559611
+    
        
-## 3. Database Choice: MongoDB
+## 4. Database Choice: MongoDB
 I chose MongoDB for this project for the following reasons:
 1. Flexibility (NoSQL): MongoDB’s document-oriented structure allows for schema evolution. Adding new features (like comments or tags) is easier without complex 2 database migrations.
 2. Scalability: Handles horizontal scaling natively, which is ideal for platforms with high-growth traffic.
