@@ -3,8 +3,6 @@ const connectDB = async () => {
   mongoose.connection.on("connected", () => {
     console.log("DB Connected");
   });
-  await mongoose.connect(
-    `${process.env.MONGODB_URL}/personal-blogging-platform`,
-  );
+  await mongoose.connect(process.env.MONGODB_URL);
 };
 export default connectDB;
